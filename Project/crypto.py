@@ -1,0 +1,2 @@
+class CryptoCurrency:
+    pass
