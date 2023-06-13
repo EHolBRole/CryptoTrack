@@ -1,5 +1,6 @@
 import requests
-from crypto import CryptoCurrency  as crypto 
+import datetime
+from crypto import CryptoCurrency as crypto 
 #it works onle when crypto.py file is near api.py
 
 
@@ -27,15 +28,31 @@ class CryptoCompareAPI(API):
 class BinanceAPI(API):
     def __init__(self, CurUrl = "https://fapi.binance.com"):
         super().__init__(CurUrl)
+    def make_request(self, endpoint, params):
+        response = self.Get(params, endpoint)
+        if response.status_code == 200:
+            return response
+        return response
     def CurrentCost(self, cryptoCurrency):
-        print(cryptoCurrency.type)
         path = "/fapi/v1/ticker/price"
         param = {
             "symbol": cryptoCurrency.type + cryptoCurrency.convertionType
         }        
         print(param)
         return self.Get(param, path)        
-    
+    def getHistoryData(self, cryptoCurrency = crypto(), Interval = "1m", Time = 30, limit = 10):
+        endTime = datetime.datetime.now()
+        startTime = endTime - datetime.timedelta(seconds= Time)
+        path = "/fapi/v1/klines"
+        params = {  
+            "symbol" : cryptoCurrency.type + cryptoCurrency.convertionType,
+            "interval" : Interval,
+            "limit" : limit,                
+            "startTime" : startTime,                       
+            "endTime" : endTime                       
+        }
+        return self.make_request(path, params)
+        
     def CostChanges(self, cryptoCurrency): # time == 24hours
         print(cryptoCurrency.type)
         path = "/fapi/v1/ticker/24hr"
