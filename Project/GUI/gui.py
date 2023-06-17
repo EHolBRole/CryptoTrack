@@ -16,7 +16,7 @@ def draw_graphic(p_data):
 
 
 def gui_processing(to_close=False):
-    u_input = Returns.NULL  # should be ENUM
+    u_input = Returns.NULL
 
     if to_close:
         window.close()
