@@ -4,28 +4,30 @@ import matplotlib.pyplot as plt
 from enums import Returns
 
 
+GRAPH_CORDS = [(-20, -15), (256, 256)]
+
+
 def draw_graphic(p_data: [int, int], window: psg.Window):
     window['-GRAPH-'].erase()
     last_x = 0
-    last_y = 0
-    window['-GRAPH-'].draw_text('0', (-10, 0), color='black', font=None, angle=0)
-    window['-GRAPH-'].draw_text('25', (-10, 25), color='black', font=None, angle=0)
-    window['-GRAPH-'].draw_text('50', (-10, 50), color='black', font=None, angle=0)
-    window['-GRAPH-'].draw_text('75', (-10, 75), color='black', font=None, angle=0)
-    window['-GRAPH-'].draw_text('90', (-10, 90), color='black', font=None, angle=0)
-    window['-GRAPH-'].draw_text('105', (-10, 105), color='black', font=None, angle=0)
-    window['-GRAPH-'].draw_text('120', (-10, 130), color='black', font=None, angle=0)
+    last_y = p_data[0][1]
+    for i in range(1, 13):
+        window['-GRAPH-'].draw_text(f'{(int((GRAPH_CORDS[1][1]-10)/12)*i)}', (-10, ((GRAPH_CORDS[1][1]-10)/12)*i), color='black', font=None, angle=0)
+        window['-GRAPH-'].DrawLine((0, ((GRAPH_CORDS[1][1]-10)/12)*i), (GRAPH_CORDS[1][0], ((GRAPH_CORDS[1][1]-10)/12)*i), width=1, color="LIGHT GRAY")
+    window['-GRAPH-'].DrawLine((0, 0), (0, GRAPH_CORDS[1][1]), width=1, color="BLACK")
+    window['-GRAPH-'].DrawLine((0, 0), (GRAPH_CORDS[1][0], 0), width=1, color="BLACK")
+    window['-GRAPH-'].draw_text(f'{int(p_data[0][0])}', (0, -10), color='black', font=None, angle=0)
+    counter_x = 0
     for dot in p_data:
         print(dot[0], dot[1])
-        x = dot[0]
+        counter_x += 1
+        x = ((GRAPH_CORDS[1][0]-10)/len(p_data)) * counter_x
         y = dot[1]
-        window['-GRAPH-'].draw_text(f'{x}', (x, -10), color='black', font=None, angle=0)
+        window['-GRAPH-'].draw_text(f'{counter_x}', (x, -10), color='black', font=None, angle=0)
+        window['-GRAPH-'].DrawLine((x, -5), (x, y), width=1, color="GREEN")
         window['-GRAPH-'].DrawLine((last_x, last_y), (x, y), width=1, color="BLACK")
-        last_x = dot[0]
+        last_x = ((GRAPH_CORDS[1][0]-10)/len(p_data)) * counter_x
         last_y = dot[1]
-    while last_x < 130:
-        last_x += 15
-        window['-GRAPH-'].draw_text(f'{last_x}', (last_x, -10), color='black', font=None, angle=0)
     return True
 
 
@@ -86,9 +88,9 @@ def get_options_col():
 
 
 def get_layout():
-    crypto_course_graph = psg.Graph(canvas_size=(255, 255),
-                                    graph_top_right=(140, 140),
-                                    graph_bottom_left=(-20, -15),
+    crypto_course_graph = psg.Graph(canvas_size=(1024, 740),
+                                    graph_top_right=(GRAPH_CORDS[1]),
+                                    graph_bottom_left=(GRAPH_CORDS[0]),
                                     background_color='yellow', key="-GRAPH-")
 
     col_options = get_options_col()

@@ -1,7 +1,7 @@
 import GUI.gui as gui
 import API.api as api
 import CRPC.crypto_proc as crypto_pr
-import crypto as cr
+import crypto_control as cr
 
 from enums import Returns
 from enums import Crypto
@@ -22,11 +22,18 @@ def parse_input(u_input):
     elif u_input == Returns.SHOW_CRYPTO_COURSE_GRAPH:
         print("Drawing Graphic")
         btc = cr.coin
-        raw_data = api.get_course(btc)
+        b_api = api.BinanceAPI()
 
-        parsed_data = crypto_pr.parse_data_for_graphic(raw_data)
+        #raw_data = b_api.CurrentCost(btc)
 
-        parsed_data = [[0, 40], [15, 15], [30, 40], [45, 100], [60, 75], [75, 45], [90, 55]]
+        #print(raw_data.text)
+        parsed_data = crypto_pr.parse_data_for_graphic([])
+        parsed_data = []
+        for i in range(0, 30):
+            if i % 2 == 0:
+                parsed_data.append([25*i, 140])
+            else:
+                parsed_data.append([25*i, 90])
 
         gui.draw_graphic(parsed_data, gui.main_window)
     elif u_input == Returns.SHOW_CRYPTO_COURSE_TABLE:
