@@ -21,11 +21,11 @@ def parse_input(u_input):
         return False
     elif u_input == Returns.SHOW_CRYPTO_COURSE_GRAPH:
         print("Drawing Graphic")
-        btc = cr.coin
-        raw_data = api.get_course(btc)
-
+        btc = cr.CryptoCurrency()
+        Binance = api.BinanceAPI()
+        raw_data = Binance.getHistoryData(btc).content
         parsed_data = crypto_pr.parse_data_for_graphic(raw_data)
-
+        print(parsed_data)
         gui.draw_graphic(parsed_data)
     elif u_input == Returns.SHOW_CRYPTO_COURSE_TABLE:
         print("Drawing Table")
