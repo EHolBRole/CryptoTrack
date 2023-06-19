@@ -26,7 +26,9 @@ def parse_input(u_input):
 
         parsed_data = crypto_pr.parse_data_for_graphic(raw_data)
 
-        gui.draw_graphic(parsed_data)
+        parsed_data = [[0, 40], [15, 15], [30, 40], [45, 100], [60, 75], [75, 45], [90, 55]]
+
+        gui.draw_graphic(parsed_data, gui.main_window)
     elif u_input == Returns.SHOW_CRYPTO_COURSE_TABLE:
         print("Drawing Table")
     elif u_input == Returns.SHOW_SETTINGS:
