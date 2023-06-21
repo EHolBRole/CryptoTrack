@@ -1,8 +1,17 @@
 import PySimpleGUI as psg
+import matplotlib.pyplot as plt
+
 from enums import Returns
 
 
+crypto_course_graph = psg.Graph(canvas_size=(255, 255),
+                                graph_top_right=(600, 200),
+                                graph_bottom_left=(150, 0),
+                                background_color='white')
+
+
 def draw_graphic(p_data):
+
     pass
 
 
@@ -63,16 +72,14 @@ def get_options_col():
 
 
 def get_layout():
+
     col_options = get_options_col()
     col_crypto = get_crypto_col()
 
-    crypto_course_graph = psg.Graph(canvas_size=(255, 255),
-                                    graph_top_right=(600, 200),
-                                    graph_bottom_left=(150, 0),
-                                    background_color='white')
+    course_graph = crypto_course_graph
 
     layout = [
-        [crypto_course_graph, col_options],
+        [course_graph, col_options],
         [col_crypto]
     ]
 
