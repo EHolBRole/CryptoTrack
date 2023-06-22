@@ -36,14 +36,16 @@ def parse_input(u_input):
         print(parsed_data)
         gui.draw_graphic(parsed_data, gui.main_window, coin.type)
     elif u_input == Returns.SHOW_CRYPTO_COURSE_CURRENT:
-        print("Drawing Table")
+        print("Drawing Current Course")
         Binance = api.BinanceAPI()
-        parsed_data = []
-        for en in enums.Crypto:
-            coin = cr.change_coin_type(en)
-            raw_data = Binance.get_course(coin).content
-            parsed_data.append(json.loads(raw_data))
-        gui.draw_current_course(parsed_data, gui.main_window, coin.type)
+        is_again = False
+        while not is_again:
+            parsed_data = []
+            for en in enums.Crypto:
+                coin = cr.change_coin_type(en)
+                raw_data = Binance.get_course(coin).content
+                parsed_data.append(json.loads(raw_data))
+            is_again = gui.draw_current_course(parsed_data, gui.main_window, coin.type)
     elif u_input == Returns.SHOW_SETTINGS:
         gui.draw_settings()
         print("Drawing Settings")
