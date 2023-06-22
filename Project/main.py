@@ -32,7 +32,7 @@ def parse_input(u_input):
         hol_binance = hol_api.HOL_API()
         parsed_data = hol_binance.GetHistoricalData(180, coin.type, '1w')
         print(parsed_data)
-        gui.draw_graphic(parsed_data, gui.main_window)
+        gui.draw_graphic(parsed_data, gui.main_window, coin.type)
     elif u_input == Returns.SHOW_CRYPTO_COURSE_TABLE:
         print("Drawing Table")
     elif u_input == Returns.SHOW_SETTINGS:

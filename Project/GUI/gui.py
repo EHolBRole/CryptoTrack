@@ -9,7 +9,7 @@ from API.hol_api import ParsedData
 GRAPH_CORDS = [(-20, -15), (256, 256)]
 
 
-def draw_graphic(p_data: ParsedData, window: psg.Window):
+def draw_graphic(p_data: ParsedData, window: psg.Window, crypto_type):
     window['-GRAPH-'].erase()
     last_x = 0
     last_y = p_data.values[0] / (p_data.max_value / (GRAPH_CORDS[1][1] - 10))
@@ -17,8 +17,9 @@ def draw_graphic(p_data: ParsedData, window: psg.Window):
         window['-GRAPH-'].draw_text(f'{int(p_data.max_value / 12) * i}', (-10, ((GRAPH_CORDS[1][1]-10)/12)*i), color='black', font=None, angle=0)
         window['-GRAPH-'].DrawLine((0, ((GRAPH_CORDS[1][1]-10)/12)*i), (GRAPH_CORDS[1][0], ((GRAPH_CORDS[1][1]-10)/12)*i), width=1, color="LIGHT GRAY")
     window['-GRAPH-'].DrawLine((0, 0), (0, GRAPH_CORDS[1][1]), width=1, color="BLACK")
-    window['-GRAPH-'].DrawLine((0, 0), (GRAPH_CORDS[1][0], 0), width=1, color="BLACK")
+    window['-GRAPH-'].DrawLine((0, 0), (GRAPH_CORDS[1][0] - 10, 0), width=1, color="BLACK")
     window['-GRAPH-'].draw_text(f'{p_data.dates[0]}', (0, -10), color='black', font=None, angle=0)
+    window['-GRAPH-'].draw_text(f'{crypto_type}', (-10, 0), color='green', font=32, angle=0,)
     counter_x = 0
     for index in range(1, p_data.format):
         print(p_data.dates[index], p_data.values[index])
@@ -52,12 +53,16 @@ def gui_processing(to_close=False):
     elif event in (None, "Settings"):
         return Returns.SHOW_SETTINGS
     elif event in (None, "Bitcoin"):
+        main_window['-CRYPTOTYPE-'].update('BTC')
         return Returns.SELECT_BTC
     elif event in (None, "Etherium"):
+        main_window['-CRYPTOTYPE-'].update('ETH')
         return Returns.SELECT_ETH
     elif event in (None, "Binance Coin"):
+        main_window['-CRYPTOTYPE-'].update('BNB')
         return Returns.SELECT_BNB
     elif event in (None, "Yearn.Finance"):
+        main_window['-CRYPTOTYPE-'].update('YFI')
         return Returns.SELECT_YFI
 
     return u_input
@@ -68,8 +73,9 @@ def get_crypto_col():
     button_etherium = psg.Button("Etherium")
     button_binance_coin = psg.Button("Binance Coin")
     button_waltonchain = psg.Button("Yearn.Finance")
+    text_current_type = psg.Text('BTC', key='-CRYPTOTYPE-')
 
-    layout_for_col = [[button_bitcoin, button_etherium, button_binance_coin, button_waltonchain]]
+    layout_for_col = [[button_bitcoin, button_etherium, button_binance_coin, button_waltonchain, text_current_type]]
 
     return psg.Column(layout_for_col, expand_x=True)
 
