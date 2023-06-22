@@ -1,5 +1,5 @@
 from enums import Crypto
-from API import crypto as cr
+import crypto as cr
 
 
 def change_coin_type(crypto_type):
