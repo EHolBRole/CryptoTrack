@@ -1,6 +1,6 @@
 import requests
 import datetime
-from API.crypto import CryptoCurrency as crypto
+from crypto import CryptoCurrency as crypto
 
 
 # it works onle when crypto_control.py file is near api.py
@@ -44,7 +44,7 @@ class BinanceAPI(API):
             return response
         return response
     def get_course(self, cryptoCurrency):
-        path = "/fapi/v1/ticker/price"
+        path = "/api/v1/ticker/price"
         param = {
             "symbol": cryptoCurrency.type + cryptoCurrency.convertionType
         }
