@@ -4,25 +4,41 @@ import matplotlib.pyplot as plt
 from enums import Returns
 
 
-crypto_course_graph = psg.Graph(canvas_size=(255, 255),
-                                graph_top_right=(600, 200),
-                                graph_bottom_left=(150, 0),
-                                background_color='white')
+GRAPH_CORDS = [(-20, -15), (256, 256)]
 
 
-def draw_graphic(p_data):
-
-    pass
+def draw_graphic(p_data: [int, int], window: psg.Window):
+    window['-GRAPH-'].erase()
+    last_x = 0
+    last_y = p_data[0][1]
+    for i in range(1, 13):
+        window['-GRAPH-'].draw_text(f'{(int((GRAPH_CORDS[1][1]-10)/12)*i)}', (-10, ((GRAPH_CORDS[1][1]-10)/12)*i), color='black', font=None, angle=0)
+        window['-GRAPH-'].DrawLine((0, ((GRAPH_CORDS[1][1]-10)/12)*i), (GRAPH_CORDS[1][0], ((GRAPH_CORDS[1][1]-10)/12)*i), width=1, color="LIGHT GRAY")
+    window['-GRAPH-'].DrawLine((0, 0), (0, GRAPH_CORDS[1][1]), width=1, color="BLACK")
+    window['-GRAPH-'].DrawLine((0, 0), (GRAPH_CORDS[1][0], 0), width=1, color="BLACK")
+    window['-GRAPH-'].draw_text(f'{int(p_data[0][0])}', (0, -10), color='black', font=None, angle=0)
+    counter_x = 0
+    for dot in p_data:
+        print(dot[0], dot[1])
+        counter_x += 1
+        x = ((GRAPH_CORDS[1][0]-10)/len(p_data)) * counter_x
+        y = dot[1]
+        window['-GRAPH-'].draw_text(f'{counter_x}', (x, -10), color='black', font=None, angle=0)
+        window['-GRAPH-'].DrawLine((x, -5), (x, y), width=1, color="GREEN")
+        window['-GRAPH-'].DrawLine((last_x, last_y), (x, y), width=1, color="BLACK")
+        last_x = ((GRAPH_CORDS[1][0]-10)/len(p_data)) * counter_x
+        last_y = dot[1]
+    return True
 
 
 def gui_processing(to_close=False):
-    u_input = Returns.NULL  # should be ENUM
+    u_input = Returns.NULL
 
     if to_close:
-        window.close()
+        main_window.close()
         return Returns.EXIT
 
-    event, values = window.read()
+    event, values = main_window.read()
     print(event, values)
 
     if event in (None, 'Exit'):
@@ -72,6 +88,10 @@ def get_options_col():
 
 
 def get_layout():
+    crypto_course_graph = psg.Graph(canvas_size=(1024, 740),
+                                    graph_top_right=(GRAPH_CORDS[1]),
+                                    graph_bottom_left=(GRAPH_CORDS[0]),
+                                    background_color='yellow', key="-GRAPH-")
 
     col_options = get_options_col()
     col_crypto = get_crypto_col()
@@ -88,4 +108,4 @@ def get_layout():
 
 psg.theme('DarkAmber')
 
-window = psg.Window('CryptoTrack', get_layout())
+main_window = psg.Window('CryptoTrack', get_layout())
