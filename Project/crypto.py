@@ -1,10 +1,10 @@
 from enums import Crypto
 
 class CryptoCurrency:
-    def __init__(self, type="BTC", convertionType="USDT"):
-        self.type = type
-        self.convertionType=convertionType
-
+    def __init__(self, name = "ETH", convertionType="USDT"):
+        self.name = name
+        self.type = name
+        self.convertionType = convertionType
     pass
 
 
