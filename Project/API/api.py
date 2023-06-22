@@ -43,9 +43,8 @@ class BinanceAPI(API):
         if response.status_code == 200:
             return response
         return response
-
-    def CurrentCost(self, cryptoCurrency):
-        path = "/api/v1/ticker/price"
+    def get_course(self, cryptoCurrency):
+        path = "/fapi/v1/ticker/price"
         param = {
             "symbol": cryptoCurrency.type + cryptoCurrency.convertionType
         }
@@ -72,4 +71,4 @@ class BinanceAPI(API):
             "symbol": cryptoCurrency.type + cryptoCurrency.convertionType
         }
         print(param)
-        return self.Get(param, path)
+        return self.make_request(path, param)
