@@ -8,6 +8,8 @@ from API.hol_api import ParsedData
 
 GRAPH_CORDS = [(-20, -15), (256, 256)]
 
+SETTINGS = {'INTCOMBO': '1w', 'HOWLONG': 30}
+
 
 def draw_graphic(p_data: ParsedData, window: psg.Window, crypto_type):
     window['-GRAPH-'].erase()
@@ -34,6 +36,74 @@ def draw_graphic(p_data: ParsedData, window: psg.Window, crypto_type):
     return True
 
 
+def draw_settings():
+    window = psg.Window('Settings', get_settings_layout())
+    is_settings = True
+    while is_settings:
+        events, values = window.read()
+        print(events, values)
+        if events in (None, 'Accept'):
+            int_combo = window['-INTCOMBO-'].get()
+            howlong_combo = window['-HOWLONG-'].get()
+            if int_combo == 'day interval':
+                SETTINGS['INTCOMBO'] = '1d'
+            if int_combo == 'week interval':
+                SETTINGS['INTCOMBO'] = '1w'
+            if howlong_combo == '7 days':
+                SETTINGS['HOWLONG'] = 7
+            if howlong_combo == '15 days':
+                SETTINGS['HOWLONG'] = 15
+            if howlong_combo == '30 days':
+                SETTINGS['HOWLONG'] = 30
+            if howlong_combo == '90 days':
+                SETTINGS['HOWLONG'] = 90
+            is_settings = False
+    pass
+
+
+def draw_current_course(p_data: [], window: psg.Window, crypto_type):
+    main_text = psg.Text('CURRENT COURSES')
+    column = []
+    refresh_button = psg.Button('Refresh')
+    for coin in p_data:
+        column.append([psg.Text(str(coin['symbol'])), psg.Text(str(coin['price']))])
+    exit_button = psg.Exit()
+    layout = [[main_text], [psg.Column(column)], [refresh_button, exit_button]]
+    this_window = psg.Window('Current Courses', layout)
+    is_current_course = True
+    while is_current_course:
+        events, values = this_window.read()
+        print(events, values)
+        if events in (None, 'Refresh'):
+            is_current_course = False
+            this_window.close()
+            draw_current_course(p_data, window, crypto_type)
+        if events in (None, 'Exit'):
+            this_window.close()
+            is_current_course = False
+    return True
+
+
+
+
+def get_settings_layout():
+    graph_text = psg.Text('FOR MATH GRAPHS')
+    interval_format = psg.Combo(['day interval', 'week interval'], key='-INTCOMBO-')
+    interval_format_text = psg.Text('Interval')
+    howlong_format = psg.Combo(['7 days', '15 day', '30 days', '90 days'], key='-HOWLONG-')
+    howlong_format_text = psg.Text('Area of analysis')
+    ok_button = psg.Exit('Accept')
+    layout_for_col_graph = [[graph_text],
+                            [interval_format, interval_format_text],
+                            [howlong_format, howlong_format_text]]
+    graph_col = psg.Column(layout_for_col_graph)
+    layout = [
+             [graph_col],
+             [ok_button]
+         ]
+    return layout
+
+
 def gui_processing(to_close=False):
     u_input = Returns.NULL
 
@@ -48,8 +118,8 @@ def gui_processing(to_close=False):
         return Returns.EXIT
     elif event in (None, "Show Graphic"):
         return Returns.SHOW_CRYPTO_COURSE_GRAPH
-    elif event in (None, "Show Table"):
-        return Returns.SHOW_CRYPTO_COURSE_TABLE
+    elif event in (None, "Show Current Course"):
+        return Returns.SHOW_CRYPTO_COURSE_CURRENT
     elif event in (None, "Settings"):
         return Returns.SHOW_SETTINGS
     elif event in (None, "Bitcoin"):
@@ -63,6 +133,11 @@ def gui_processing(to_close=False):
         return Returns.SELECT_BNB
     elif event in (None, "Yearn.Finance"):
         main_window['-CRYPTOTYPE-'].update('YFI')
+    elif event in (None, "Lightcoin"):
+        main_window['-CRYPTOTYPE-'].update('LTC')
+        return Returns.SELECT_YFI
+    elif event in (None, "PAX Gold"):
+        main_window['-CRYPTOTYPE-'].update('PAXG')
         return Returns.SELECT_YFI
 
     return u_input
@@ -73,9 +148,11 @@ def get_crypto_col():
     button_etherium = psg.Button("Etherium")
     button_binance_coin = psg.Button("Binance Coin")
     button_waltonchain = psg.Button("Yearn.Finance")
+    button_lightcoin = psg.Button("Lightcoin")
+    button_paxgold = psg.Button("PAX Gold")
     text_current_type = psg.Text('BTC', key='-CRYPTOTYPE-')
 
-    layout_for_col = [[button_bitcoin, button_etherium, button_binance_coin, button_waltonchain, text_current_type]]
+    layout_for_col = [[button_bitcoin, button_etherium, button_binance_coin, button_waltonchain, button_lightcoin, button_paxgold, text_current_type]]
 
     return psg.Column(layout_for_col, expand_x=True)
 
@@ -83,7 +160,7 @@ def get_crypto_col():
 def get_options_col():
     button_exit = psg.Exit("Exit")
     button_show_graph = psg.Button("Show Graphic")
-    button_show_table = psg.Button("Show Table")
+    button_show_table = psg.Button("Show Current Course")
     button_settings = psg.Button("Settings")
 
     layout_for_col = [[button_exit],
@@ -99,7 +176,7 @@ def get_layout():
     crypto_course_graph = psg.Graph(canvas_size=(1024, 740),
                                     graph_top_right=(GRAPH_CORDS[1]),
                                     graph_bottom_left=(GRAPH_CORDS[0]),
-                                    background_color='yellow', key="-GRAPH-")
+                                    background_color='white', key="-GRAPH-")
 
     col_options = get_options_col()
     col_crypto = get_crypto_col()

@@ -14,8 +14,6 @@ class HOL_API:
         untilThisDate = datetime.datetime.now()
         sinceThisDate = untilThisDate - datetime.timedelta(days = howLong)
         # Execute the query from binance - timestamps must be converted to strings !
-        if interval == '1mt':
-            candle = self.client.get_historical_klines(coin_type+"USDT", Client.KLINE_INTERVAL_1MONTH, str(sinceThisDate), str(untilThisDate))
         if interval == '1w':
             candle = self.client.get_historical_klines(coin_type+"USDT", Client.KLINE_INTERVAL_1WEEK, str(sinceThisDate), str(untilThisDate))
         elif interval == '1d':
