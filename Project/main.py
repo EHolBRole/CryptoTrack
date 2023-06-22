@@ -21,21 +21,12 @@ def parse_input(u_input):
         return False
     elif u_input == Returns.SHOW_CRYPTO_COURSE_GRAPH:
         print("Drawing Graphic")
-        btc = cr.coin
-        b_api = api.BinanceAPI()
-
-        #raw_data = b_api.CurrentCost(btc)
-
-        #print(raw_data.text)
-        parsed_data = crypto_pr.parse_data_for_graphic([])
-        parsed_data = []
-        for i in range(0, 30):
-            if i % 2 == 0:
-                parsed_data.append([25*i, 140])
-            else:
-                parsed_data.append([25*i, 90])
-
-        gui.draw_graphic(parsed_data, gui.main_window)
+        btc = cr.CryptoCurrency()
+        Binance = api.BinanceAPI()
+        raw_data = Binance.getHistoryData(btc).content
+        parsed_data = crypto_pr.parse_data_for_graphic(raw_data)
+        print(parsed_data)
+        gui.draw_graphic(parsed_data)
     elif u_input == Returns.SHOW_CRYPTO_COURSE_TABLE:
         print("Drawing Table")
     elif u_input == Returns.SHOW_SETTINGS:
