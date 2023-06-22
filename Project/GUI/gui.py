@@ -77,7 +77,7 @@ def draw_current_course(p_data: [], window: psg.Window, crypto_type):
         if events in (None, 'Refresh'):
             is_current_course = False
             this_window.close()
-            draw_current_course(p_data, window, crypto_type)
+            return False
         if events in (None, 'Exit'):
             this_window.close()
             is_current_course = False
