@@ -1,5 +1,6 @@
 import requests
 import datetime
+import ciso8601
 from crypto import CryptoCurrency as crypto
 
 
@@ -51,16 +52,17 @@ class BinanceAPI(API):
         print(param)
         return self.Get(param, path)
 
-    def getHistoryData(self, cryptoCurrency=crypto(), Interval="1m", Time=30, limit=10):
+    def getHistoryData(self, cryptoCurrency=crypto(), Interval="1m", Time=3000, limit=10):
         endTime = datetime.datetime.now()
-        startTime = endTime - datetime.timedelta(seconds=Time)
+        startTime = (endTime - datetime.timedelta(seconds=Time)).timestamp()
+        endTime = endTime.timestamp()
         path = "/api/v1/klines"
         params = {
             "symbol": cryptoCurrency.type + cryptoCurrency.convertionType,
             "interval": Interval,
             "limit": limit,
-            "startTime": startTime,
-            "endTime": endTime
+            #"startTime": str(int(startTime)),
+            #"endTime": str(int(endTime))
         }
         return self.make_request(path, params)
 

@@ -9,14 +9,14 @@ class Returns(Enum):
     SHOW_SETTINGS = 4
     SELECT_BTC = 5
     SELECT_ETH = 6
-    SELECT_DOGE = 7
-    SELECT_USDT = 8
+    SELECT_BNB = 7
+    SELECT_YFI = 8
     pass
 
 
 class Crypto(Enum):
     BTC = 0
     ETH = 1
-    DOGE = 2
-    USDT = 3
+    BNB = 2
+    YFI = 3
     pass

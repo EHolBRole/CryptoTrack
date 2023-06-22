@@ -9,16 +9,12 @@ class CryptoCurrency:
 
 
 def change_coin_type(crypto_type):
-    global coin
     if crypto_type == Crypto.BTC:
-        coin = CryptoCurrency('BTC')
-    if crypto_type == Crypto.DOGE:
-        coin = CryptoCurrency('DOGE')
+        return CryptoCurrency('BTC')
+    if crypto_type == Crypto.BNB:
+        return CryptoCurrency('BNB')
     if crypto_type == Crypto.ETH:
-        coin = CryptoCurrency('ETH')
-    if crypto_type == Crypto.USDT:
-        coin = CryptoCurrency('USDT')
-    pass
+        return CryptoCurrency('ETH')
+    if crypto_type == Crypto.WTC:
+        return CryptoCurrency('WTC')
 
-
-coin = CryptoCurrency('USDT')

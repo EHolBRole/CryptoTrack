@@ -3,9 +3,12 @@ import API.api as api
 import CRPC.crypto_proc as crypto_pr
 import crypto_control as cr
 import crypto as crypt
+import API.hol_api as hol_api
 
 from enums import Returns
 from enums import Crypto
+
+coin = crypt.CryptoCurrency()
 
 
 def init():
@@ -22,10 +25,12 @@ def parse_input(u_input):
         return False
     elif u_input == Returns.SHOW_CRYPTO_COURSE_GRAPH:
         print("Drawing Graphic")
-        btc = crypt.CryptoCurrency()
         Binance = api.BinanceAPI()
-        raw_data = Binance.getHistoryData(btc).content
-        parsed_data = crypto_pr.parse_data_for_graphic(raw_data)
+        global coin
+        # raw_data = Binance.getHistoryData(coin).content
+        # parsed_data = crypto_pr.parse_data_for_graphic(raw_data)
+        hol_binance = hol_api.HOL_API()
+        parsed_data = hol_binance.GetHistoricalData(180, coin.type, '1w')
         print(parsed_data)
         gui.draw_graphic(parsed_data, gui.main_window)
     elif u_input == Returns.SHOW_CRYPTO_COURSE_TABLE:
@@ -33,13 +38,13 @@ def parse_input(u_input):
     elif u_input == Returns.SHOW_SETTINGS:
         print("Drawing Settings")
     elif u_input == Returns.SELECT_BTC:
-        cr.change_coin_type(Crypto.BTC)
+        coin = cr.change_coin_type(Crypto.BTC)
     elif u_input == Returns.SELECT_ETH:
-        cr.change_coin_type(Crypto.ETH)
-    elif u_input == Returns.SELECT_DOGE:
-        cr.change_coin_type(Crypto.DOGE)
-    elif u_input == Returns.SELECT_USDT:
-        cr.change_coin_type(Crypto.USDT)
+        coin = cr.change_coin_type(Crypto.ETH)
+    elif u_input == Returns.SELECT_BNB:
+        coin = cr.change_coin_type(Crypto.BNB)
+    elif u_input == Returns.SELECT_YFI:
+        coin = cr.change_coin_type(Crypto.YFI)
 
     return True
 

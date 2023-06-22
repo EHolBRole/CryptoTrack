@@ -3,31 +3,33 @@ import matplotlib.pyplot as plt
 
 from enums import Returns
 
+from API.hol_api import ParsedData
+
 
 GRAPH_CORDS = [(-20, -15), (256, 256)]
 
 
-def draw_graphic(p_data: [int, int], window: psg.Window):
+def draw_graphic(p_data: ParsedData, window: psg.Window):
     window['-GRAPH-'].erase()
     last_x = 0
-    last_y = p_data[0][1]
+    last_y = p_data.values[0] / (p_data.max_value / (GRAPH_CORDS[1][1] - 10))
     for i in range(1, 13):
-        window['-GRAPH-'].draw_text(f'{(int((GRAPH_CORDS[1][1]-10)/12)*i)}', (-10, ((GRAPH_CORDS[1][1]-10)/12)*i), color='black', font=None, angle=0)
+        window['-GRAPH-'].draw_text(f'{int(p_data.max_value / 12) * i}', (-10, ((GRAPH_CORDS[1][1]-10)/12)*i), color='black', font=None, angle=0)
         window['-GRAPH-'].DrawLine((0, ((GRAPH_CORDS[1][1]-10)/12)*i), (GRAPH_CORDS[1][0], ((GRAPH_CORDS[1][1]-10)/12)*i), width=1, color="LIGHT GRAY")
     window['-GRAPH-'].DrawLine((0, 0), (0, GRAPH_CORDS[1][1]), width=1, color="BLACK")
     window['-GRAPH-'].DrawLine((0, 0), (GRAPH_CORDS[1][0], 0), width=1, color="BLACK")
-    window['-GRAPH-'].draw_text(f'{int(p_data[0][0])}', (0, -10), color='black', font=None, angle=0)
+    window['-GRAPH-'].draw_text(f'{p_data.dates[0]}', (0, -10), color='black', font=None, angle=0)
     counter_x = 0
-    for dot in p_data:
-        print(dot[0], dot[1])
+    for index in range(1, p_data.format):
+        print(p_data.dates[index], p_data.values[index])
         counter_x += 1
-        x = ((GRAPH_CORDS[1][0]-10)/len(p_data)) * counter_x
-        y = dot[1]
-        window['-GRAPH-'].draw_text(f'{counter_x}', (x, -10), color='black', font=None, angle=0)
+        x = ((GRAPH_CORDS[1][0]-5)/p_data.format) * counter_x
+        y = p_data.values[index] / (p_data.max_value / (GRAPH_CORDS[1][1] - 10))
+        window['-GRAPH-'].draw_text(f'{p_data.dates[index]}', (x, -10), color='black', font=None, angle=0)
         window['-GRAPH-'].DrawLine((x, -5), (x, y), width=1, color="GREEN")
         window['-GRAPH-'].DrawLine((last_x, last_y), (x, y), width=1, color="BLACK")
-        last_x = ((GRAPH_CORDS[1][0]-10)/len(p_data)) * counter_x
-        last_y = dot[1]
+        last_x = ((GRAPH_CORDS[1][0]-5)/p_data.format) * counter_x
+        last_y = p_data.values[index] / (p_data.max_value / (GRAPH_CORDS[1][1] - 10))
     return True
 
 
@@ -53,21 +55,21 @@ def gui_processing(to_close=False):
         return Returns.SELECT_BTC
     elif event in (None, "Etherium"):
         return Returns.SELECT_ETH
-    elif event in (None, "Dogecoin"):
-        return Returns.SELECT_DOGE
-    elif event in (None, "USDT"):
-        return Returns.SELECT_USDT
+    elif event in (None, "Binance Coin"):
+        return Returns.SELECT_BNB
+    elif event in (None, "Yearn.Finance"):
+        return Returns.SELECT_YFI
 
     return u_input
 
 
 def get_crypto_col():
     button_bitcoin = psg.Button("Bitcoin")
-    button_dogecoin = psg.Button("Dogecoin")
     button_etherium = psg.Button("Etherium")
-    button_usdt = psg.Button("USDT")
+    button_binance_coin = psg.Button("Binance Coin")
+    button_waltonchain = psg.Button("Yearn.Finance")
 
-    layout_for_col = [[button_bitcoin, button_dogecoin, button_etherium, button_usdt]]
+    layout_for_col = [[button_bitcoin, button_etherium, button_binance_coin, button_waltonchain]]
 
     return psg.Column(layout_for_col, expand_x=True)
 

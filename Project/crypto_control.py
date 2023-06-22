@@ -3,18 +3,15 @@ import crypto as cr
 
 
 def change_coin_type(crypto_type):
-    global coin
     if crypto_type == Crypto.BTC:
-        coin = cr.CryptoCurrency('BTC')
-    if crypto_type == Crypto.DOGE:
-        coin = cr.CryptoCurrency('DOGE')
+        return cr.CryptoCurrency('BTC')
+    if crypto_type == Crypto.BNB:
+        return cr.CryptoCurrency('BNB')
     if crypto_type == Crypto.ETH:
-        coin = cr.CryptoCurrency('ETH')
-    if crypto_type == Crypto.USDT:
-        coin = cr.CryptoCurrency('USDT')
-    pass
+        return cr.CryptoCurrency('ETH')
+    if crypto_type == Crypto.YFI:
+        return cr.CryptoCurrency('YFI')
+    return "Exception"
 
-
-coin = cr.CryptoCurrency('USDT')
 
 
